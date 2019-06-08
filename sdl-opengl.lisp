@@ -5,7 +5,7 @@
 (ql:quickload :lispbuilder-sdl)
 (ql:quickload :cl-opengl)
 
-(defun main ()
+(defun %main ()
   (sdl:with-init ()
     (sdl:window 480 640
                 :title-caption "SDL OPENGL"
@@ -38,3 +38,9 @@
         (sdl:update-display)))))
 
 
+(defun main ()
+  #+sbcl
+  (sb-int:with-float-traps-masked (:invalid :inexact)
+    (%main))
+  #-sbcl
+  (%main))
